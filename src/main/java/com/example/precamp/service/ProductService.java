@@ -1,6 +1,7 @@
 package com.example.precamp.service;
 
 import com.example.precamp.domain.Product;
+import com.example.precamp.dto.ProductRequestDto;
 import com.example.precamp.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,16 +16,22 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     @Transactional
-    public void saveProduct(Product product) {
+    public Product saveProduct(ProductRequestDto request) {
+        Product product = new Product();
+        product.setName(request.getName());
+        product.setPrice(request.getPrice());
+        product.setStock(request.getStock());
         productRepository.save(product);
+        return product;
     }
 
     @Transactional
-    public void updateProduct(Long productId, String name, int price, int stock) {
+    public Product updateProduct(Long productId, ProductRequestDto request) {
         Product findProduct = productRepository.findById(productId);
-        findProduct.setName(name);
-        findProduct.setPrice(price);
-        findProduct.setStock(stock);
+        findProduct.setName(request.getName());
+        findProduct.setPrice(request.getPrice());
+        findProduct.setStock(request.getStock());
+        return findProduct;
     }
 
     @Transactional
