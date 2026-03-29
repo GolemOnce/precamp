@@ -9,15 +9,12 @@ import com.example.precamp.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class OrderController {
 
@@ -26,9 +23,13 @@ public class OrderController {
 
     // 등록
     @PostMapping("/orders/new")
-    public ResponseEntity<OrderCreateResponseDto> save (@RequestBody OrderRequestDto request) {
-        Order order = orderService.saveOrder(request);
-        return ResponseEntity.status(201).body(new OrderCreateResponseDto(order));
+    public ResponseEntity<?> save (@RequestBody OrderRequestDto request) {
+        try {
+            Order order = orderService.saveOrder(request);
+            return ResponseEntity.status(201).body(new OrderCreateResponseDto(order));
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     // 단일 조회

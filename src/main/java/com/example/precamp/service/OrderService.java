@@ -27,6 +27,10 @@ public class OrderService {
     @Transactional
     public Order saveOrder (OrderRequestDto request) {
         Product product = productRepository.findById(request.getProductId());
+
+        // (도전 과제) 재고 감소
+        product.decreaseStock(request.getOrderQuantity());
+
         Order order = new Order();
         orderRepository.save(order);
 
