@@ -42,8 +42,10 @@ public class OrderController {
 
     // 목록 조회(도전)
     @GetMapping("/orders")
-    public ResponseEntity<List<OrderResponseDto>> findAllOrders() {
-        List<OrderResponseDto> orders = orderService.findAllOrders().stream()
+    public ResponseEntity<List<OrderResponseDto>> findAllOrders(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        List<OrderResponseDto> orders = orderService.findAllOrders(page, size).stream()
                 .map(OrderResponseDto::new).toList();
         return ResponseEntity.ok(orders);
     }

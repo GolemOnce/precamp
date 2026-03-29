@@ -31,11 +31,13 @@ public class OrderRepository {
                 .getSingleResult();
     }
 
-    public List<Order> findAllWithProducts() {
+    public List<Order> findAllWithProducts(int page, int size) {
         return em.createQuery(
                         "select o from Order o " +
                                 "join fetch o.orderProducts op " +
                                 "join fetch op.product", Order.class)
+                .setFirstResult((page - 1) * size)
+                .setMaxResults(size)
                 .getResultList();
     }
 }

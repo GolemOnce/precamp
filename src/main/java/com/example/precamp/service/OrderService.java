@@ -48,7 +48,7 @@ public class OrderService {
 
     // 목록 조회
     @Transactional(readOnly = true)
-    public List<Order> findAllOrders () {
-        return orderRepository.findAllWithProducts();
+    public List<Order> findAllOrders (int page, int size) {
+        return orderRepository.findAllWithProducts(page, size);
     }
 }
