@@ -20,8 +20,8 @@ public class ProductController {
     private final ProductService productService;
 
     // 등록
-    @PostMapping("/products")
-    public ResponseEntity<ProductResponseDto> create(@RequestBody ProductRequestDto request) {
+    @PostMapping("/products/new")
+    public ResponseEntity<ProductResponseDto> save(@RequestBody ProductRequestDto request) {
         Product product = productService.saveProduct(request);
         return ResponseEntity.status(201).body(new ProductResponseDto(product));
     }
