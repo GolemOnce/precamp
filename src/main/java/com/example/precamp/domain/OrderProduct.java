@@ -35,6 +35,7 @@ public class OrderProduct {
         orderProduct.setProduct(product);
         orderProduct.setOrderPrice(product.getPrice() *  orderQuantity);
         orderProduct.setOrderQuantity(orderQuantity);
+        order.getOrderProducts().add(orderProduct); // 메모리상 객체 동기화 clear(), flush() 제거
         return orderProduct;
     }
 }
