@@ -24,12 +24,8 @@ public class OrderController {
     // 등록
     @PostMapping("/orders/new")
     public ResponseEntity<?> save (@RequestBody OrderRequestDto request) {
-        try {
-            Order order = orderService.saveOrder(request);
-            return ResponseEntity.status(201).body(new OrderCreateResponseDto(order));
-        } catch (IllegalStateException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        Order order = orderService.saveOrder(request);
+        return ResponseEntity.status(201).body(new OrderCreateResponseDto(order));
     }
 
     // 단일 조회
