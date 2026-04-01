@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +28,8 @@ public class ProductService {
 
     @Transactional
     public Product updateProduct(Long productId, ProductRequestDto request) {
-        Product findProduct = productRepository.findById(productId);
+        Product findProduct = productRepository.findById(productId)
+                .orElseThrow(() -> new IllegalArgumentException("상품이 없습니다."));
         findProduct.setName(request.getName());
         findProduct.setPrice(request.getPrice());
         findProduct.setStock(request.getStock());
@@ -36,13 +38,15 @@ public class ProductService {
 
     @Transactional
     public void deleteProduct(Long productId) {
-        Product findProduct = productRepository.findById(productId);
-        productRepository.remove(findProduct);
+        Product findProduct = productRepository.findById(productId)
+                .orElseThrow(() -> new IllegalArgumentException("상품이 없습니다."));
+        productRepository.delete(findProduct);
     }
 
     @Transactional(readOnly = true)
     public Product findById(Long productId) {
-        return productRepository.findById(productId);
+        return productRepository.findById(productId)
+                .orElseThrow(() -> new IllegalArgumentException("상품이 없습니다."));
     }
 
     @Transactional(readOnly = true)

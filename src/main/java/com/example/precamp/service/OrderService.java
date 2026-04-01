@@ -10,10 +10,13 @@ import com.example.precamp.repository.ProductRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +29,8 @@ public class OrderService {
     // 등록
     @Transactional
     public Order saveOrder (OrderRequestDto request) {
-        Product product = productRepository.findById(request.getProductId());
+        Product product = productRepository.findById(request.getProductId())
+                .orElseThrow(() -> new IllegalStateException("상품이 없습니다."));
 
         // (도전 과제) 재고 감소
         product.decreaseStock(request.getOrderQuantity());
@@ -49,6 +53,7 @@ public class OrderService {
     // 목록 조회
     @Transactional(readOnly = true)
     public List<Order> findAllOrders (int page, int size) {
-        return orderRepository.findAllWithProducts(page, size);
+        Pageable pageable = PageRequest.of(page - 1, size);
+        return orderRepository.findAllWithProducts(pageable).getContent();
     }
 }

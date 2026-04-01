@@ -3,10 +3,15 @@ package com.example.precamp.repository;
 import com.example.precamp.domain.Order;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
+/*
 @Repository
 @RequiredArgsConstructor
 public class OrderRepository {
@@ -41,4 +46,18 @@ public class OrderRepository {
                 .setMaxResults(size)
                 .getResultList();
     }
+}
+*/
+
+public interface OrderRepository extends JpaRepository<Order, Long> {
+
+    @Query("select o from Order o " +
+            "join fetch o.orderProducts op " +
+            "join fetch op.product " +
+            "where o.id = :orderId")
+    Order findByIdWithProducts(@Param("orderId") Long orderId);
+
+    @Query("select o from Order o ")
+    Page<Order> findAllWithProducts(Pageable pageable);
+
 }
